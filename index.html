@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>哆啦A夢高血壓衛教搶答賽</title>
+<style>
+  :root{
+    --dora-blue:#0097e0; --dora-dark:#0077b3; --dora-light:#e6f7ff;
+    --dora-red:#e60012; --dora-yellow:#f5d000; --bell:#f7c948;
+    --text:#1a2b3c; --correct:#2e7d32; --wrong:#c62828;
+    --gold:#f5c542; --silver:#cfd8dc; --bronze:#d9a066;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;color:var(--text);min-height:100vh;
+    background:radial-gradient(circle at 20px 20px, rgba(255,255,255,.35) 6px, transparent 7px),
+    radial-gradient(circle at 60px 60px, rgba(255,255,255,.25) 6px, transparent 7px),
+    linear-gradient(180deg,#7fd3ff 0%, #bfeaff 40%, #eaf9ff 100%);background-size:80px 80px,80px 80px,auto;}
+  .app{max-width:980px;margin:0 auto;padding:18px 14px 36px}
+  .header{background:var(--dora-blue);color:#fff;border-radius:28px;padding:16px 18px;position:relative;box-shadow:0 10px 0 var(--dora-dark),0 18px 30px rgba(0,0,0,.15);overflow:hidden}
+  .header::before{content:"";position:absolute;right:-30px;top:-30px;width:160px;height:160px;background:rgba(255,255,255,.15);border-radius:50%}
+  .title-row{display:flex;align-items:center;gap:14px}
+  .face{width:82px;height:82px;flex:0 0 82px;background:var(--dora-blue);border:4px solid #fff;border-radius:50%;position:relative}
+  .face .white{position:absolute;left:50%;bottom:4px;transform:translateX(-50%);width:66px;height:54px;background:#fff;border-radius:50% 50% 45% 45%}
+  .eye{position:absolute;top:8px;width:21px;height:26px;background:#fff;border:2px solid #333;border-radius:50%}
+  .eye.left{left:17px}.eye.right{right:17px}
+  .pupil{position:absolute;bottom:5px;width:7px;height:9px;background:#333;border-radius:50%}
+  .eye.left .pupil{right:4px}.eye.right .pupil{left:4px}
+  .nose{position:absolute;top:30px;left:50%;transform:translateX(-50%);width:15px;height:15px;background:var(--dora-red);border:2px solid #333;border-radius:50%}
+  .nose::after{content:"";position:absolute;top:2px;left:3px;width:5px;height:5px;background:#fff;border-radius:50%}
+  .mouth{position:absolute;top:38px;left:50%;transform:translateX(-50%);width:2px;height:16px;background:#333}
+  .smile{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:36px;height:14px;border-bottom:3px solid #333;border-radius:0 0 40px 40px}
+  .whisker{position:absolute;top:38px;width:17px;height:2px;background:#333}
+  .whisker.l1{left:6px;transform:rotate(12deg)}.whisker.l2{left:4px;top:44px}.whisker.l3{left:6px;top:50px;transform:rotate(-12deg)}
+  .whisker.r1{right:6px;transform:rotate(-12deg)}.whisker.r2{right:4px;top:44px}.whisker.r3{right:6px;top:50px;transform:rotate(12deg)}
+  h1{margin:0;font-size:1.55rem;text-shadow:0 2px 0 rgba(0,0,0,.15)}
+  .subtitle{margin:4px 0 0;opacity:.95;font-size:.96rem}
+  .collar{height:14px;background:var(--dora-red);border-radius:10px;margin:12px 4px 0;position:relative}
+  .bell{position:absolute;left:50%;top:-4px;transform:translateX(-50%);width:26px;height:26px;background:var(--bell);border:2px solid #8a6a00;border-radius:50%}
+  .bell::before{content:"";position:absolute;left:50%;top:5px;transform:translateX(-50%);width:8px;height:4px;border:2px solid #8a6a00;border-bottom:none;border-radius:6px 6px 0 0}
+  .bell::after{content:"";position:absolute;left:50%;bottom:4px;transform:translateX(-50%);width:5px;height:5px;background:#8a6a00;border-radius:50%}
+  .bell-line{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);width:2px;height:5px;background:#8a6a00}
+  .panel{margin-top:16px;background:rgba(255,255,255,.94);border:3px solid var(--dora-blue);border-radius:24px;padding:16px;box-shadow:0 8px 20px rgba(0,119,179,.15)}
+  .hidden{display:none !important}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .badge{background:var(--dora-light);color:var(--dora-dark);padding:6px 12px;border-radius:999px;font-weight:700;border:2px solid #bfeaff}
+  input[type=text]{padding:10px 12px;border:2px solid #bfeaff;border-radius:12px;font-size:1rem;min-width:180px}
+  button.main{background:var(--dora-blue);color:#fff;border:none;padding:10px 16px;border-radius:999px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 0 var(--dora-dark)}
+  button.main:hover{filter:brightness(1.05)} button.main:active{transform:translateY(2px);box-shadow:0 2px 0 var(--dora-dark)}
+  button.sub{background:#fff;color:var(--dora-dark);border:2px solid #bfeaff;padding:9px 14px;border-radius:999px;font-weight:700;cursor:pointer}
+  button:disabled{opacity:.55;cursor:not-allowed;filter:none;transform:none}
+  .players-setup{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .chip{background:#fff;border:2px solid #bfeaff;color:var(--dora-dark);padding:6px 10px;border-radius:999px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .chip button{border:none;background:#ffe8ea;color:#a00;border-radius:999px;width:22px;height:22px;cursor:pointer;font-weight:700}
+  .hint{color:#456;font-size:.92rem;line-height:1.5}
+  .timer-wrap{display:flex;align-items:center;gap:12px;margin:8px 0 10px}
+  .timer{font-size:1.8rem;font-weight:900;color:var(--dora-red);min-width:72px}
+  .timer.low{animation:pulse .6s infinite alternate}
+  @keyframes pulse{from{transform:scale(1)}to{transform:scale(1.08)}}
+  .bar{flex:1;height:16px;background:#dff3ff;border:2px solid #bfeaff;border-radius:999px;overflow:hidden}
+  .bar>div{height:100%;width:100%;background:linear-gradient(90deg,#00c853,#00b7ff);transition:width .2s linear}
+  .bar.low>div{background:linear-gradient(90deg,#ff9800,#ff5252)}
+  .question{font-size:1.22rem;line-height:1.6;font-weight:800;margin:6px 0 12px}
+  .qmeta{color:var(--dora-dark);font-weight:800;margin-bottom:4px}
+  .options{display:grid;gap:10px;grid-template-columns:1fr;}
+  @media(min-width:700px){.options{grid-template-columns:1fr 1fr}}
+  .opt{text-align:left;border:2px solid #cfefff;background:#fff;padding:12px 14px;border-radius:16px;font-size:1.02rem;cursor:pointer;line-height:1.5}
+  .opt:hover:not([disabled]){transform:translateY(-1px);border-color:var(--dora-blue);background:#f4fcff}
+  .opt.correct{border-color:var(--correct);background:#e8f5e9;color:#1b5e20}
+  .opt.wrong{border-color:var(--wrong);background:#ffebee;color:#7f1d1d}
+  .buzz-area{margin-top:14px;padding:12px;border:2px dashed #bfeaff;border-radius:18px;background:#f7fcff}
+  .buzz-title{font-weight:800;color:var(--dora-dark);margin-bottom:8px}
+  .buzzers{display:flex;flex-wrap:wrap;gap:8px}
+  .buzz-btn{background:#fff;border:2px solid var(--dora-blue);color:var(--dora-dark);padding:10px 14px;border-radius:14px;font-weight:800;cursor:pointer}
+  .buzz-btn:hover:not([disabled]){background:var(--dora-light)}
+  .buzz-btn.active{background:var(--dora-yellow);border-color:#caa100;color:#4a3b00}
+  .buzz-btn.out{border-color:#ddd;color:#888;background:#f5f5f5;text-decoration:line-through}
+  .status{margin-top:10px;padding:10px 12px;border-radius:14px;line-height:1.6;background:#fff;border:2px solid #e3f4ff}
+  .status.good{background:#f1f8e9;border-color:#a5d6a7}
+  .status.bad{background:#fff5f5;border-color:#ef9a9a}
+  .scoreboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:10px}
+  .score-card{background:#fff;border:2px solid #d7efff;border-radius:14px;padding:8px 10px}
+  .score-card .name{font-weight:800;color:var(--dora-dark)}
+  .score-card .pts{font-size:1.2rem;font-weight:900}
+  .score-card.lead{border-color:var(--dora-yellow);box-shadow:0 0 0 2px #fff3b0 inset}
+  /* Podium */
+  .podium-wrap{text-align:center}
+  .podium{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin:18px auto 8px;max-width:700px;height:320px}
+  .pod{flex:1;max-width:200px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+  .pod .avatar{background:var(--dora-blue);color:#fff;border:3px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,.15);border-radius:16px;padding:8px 10px;font-weight:900;margin-bottom:8px;min-width:90px}
+  .pod .medal{font-size:1.6rem;margin-bottom:4px}
+  .pod .block{width:100%;border-radius:16px 16px 8px 8px;color:#3b2f00;font-weight:900;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px;border:3px solid rgba(0,0,0,.08);box-shadow:inset 0 2px 0 rgba(255,255,255,.5)}
+  .pod.first .block{height:210px;background:linear-gradient(#ffe082,var(--gold))}
+  .pod.second .block{height:160px;background:linear-gradient(#eceff1,var(--silver));color:#37474f}
+  .pod.third .block{height:120px;background:linear-gradient(#f0c9a0,var(--bronze));color:#4e342e}
+  .pod .rank{font-size:2rem}
+  .pod .pname{font-size:1.05rem;margin-top:4px}
+  .pod .pscore{font-size:1.15rem;margin-top:2px}
+  .rank-list{margin-top:14px;text-align:left}
+  .rank-item{display:flex;justify-content:space-between;align-items:center;background:#f7fcff;border:1px solid #d7efff;border-radius:14px;padding:10px 12px;margin:8px 0;font-weight:700}
+  .rank-item.top{border-color:var(--dora-yellow);background:#fffceb}
+  .review{margin-top:16px;text-align:left}
+  .review-item{background:#f7fcff;border:1px solid #d7efff;border-radius:14px;padding:10px 12px;margin:8px 0}
+  .small{font-size:.92rem;color:#456;line-height:1.5}
+  .footer-note{margin-top:14px;text-align:center;color:#456;font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="title-row">
+      <div class="face" aria-hidden="true">
+        <div class="white"></div>
+        <div class="eye left"><div class="pupil"></div></div>
+        <div class="eye right"><div class="pupil"></div></div>
+        <div class="nose"></div><div class="mouth"></div><div class="smile"></div>
+        <div class="whisker l1"></div><div class="whisker l2"></div><div class="whisker l3"></div>
+        <div class="whisker r1"></div><div class="whisker r2"></div><div class="whisker r3"></div>
+      </div>
+      <div>
+        <h1>哆啦A夢高血壓衛教搶答賽</h1>
+        <p class="subtitle">大家一起搶答！每題 10 秒，答對又快分數高，最後站上頒獎台！</p>
+      </div>
+    </div>
+    <div class="collar"><div class="bell"><div class="bell-line"></div></div></div>
+  </div>
+
+  <!-- Setup -->
+  <div class="panel" id="setupPanel">
+    <h2 style="margin:0 0 8px;color:#0077b3">建立玩家</h2>
+    <p class="hint">輸入玩家名稱後按「加入」（2～40 人）。規則：每題限時 <b>10 秒</b>，先按自己的名字「搶答」取得作答權，再選答案。答對可得基本分＋剩餘秒數獎勵；答錯扣 2 分且其他人可繼續搶答（限時內）。</p>
+    <div class="row" style="margin:10px 0">
+      <input id="nameInput" type="text" maxlength="10" placeholder="請輸入自己的名字" />
+      <button class="main" id="addBtn">加入</button>
+    </div>
+    <p class="hint" style="margin:4px 0 0">請每位參加者自行輸入名字後按「加入」（或按 Enter）。</p>
+    <div class="players-setup" id="playerChips"></div>
+    <div class="row" style="margin-top:12px">
+      <button class="main" id="startBtn" disabled>開始搶答（10題）</button>
+    </div>
+  </div>
+
+  <!-- Quiz -->
+  <div class="panel hidden" id="quizPanel">
+    <div class="row" style="justify-content:space-between;margin-bottom:6px">
+      <div class="badge" id="progressText">第 1 / 10 題</div>
+      <div class="badge" id="ruleText">每題 10 秒搶答</div>
+    </div>
+    <div class="timer-wrap">
+      <div class="timer" id="timer">10</div>
+      <div class="bar" id="timerBar"><div id="timerFill"></div></div>
+    </div>
+    <div class="qmeta" id="qno"></div>
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+
+    <div class="buzz-area">
+      <div class="buzz-title">🔔 搶答區：請先按自己的名字搶答</div>
+      <div class="buzzers" id="buzzers"></div>
+      <div class="status" id="status">等待玩家搶答中…</div>
+    </div>
+
+    <div class="scoreboard" id="scoreboard"></div>
+    <div class="row" style="margin-top:12px">
+      <button class="main" id="nextBtn" disabled>下一題</button>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="panel hidden" id="resultPanel">
+    <div class="podium-wrap">
+      <h2 style="margin:4px 0 0;color:#0077b3">比賽結束！頒獎典禮</h2>
+      <p class="hint">恭喜前三名登上哆啦A夢頒獎台！</p>
+      <div class="podium" id="podium"></div>
+    </div>
+    <h3 style="color:#0077b3;margin:8px 0">總排名</h3>
+    <div class="rank-list" id="rankList"></div>
+    <div class="review">
+      <h3 style="color:#0077b3;margin:8px 0">題目與解析回顧</h3>
+      <div id="reviewList"></div>
+    </div>
+    <div class="row" style="margin-top:14px;justify-content:center">
+      <button class="main" id="restartBtn">重新設定玩家再玩一次</button>
+    </div>
+  </div>
+
+  <div class="footer-note">本測驗僅供衛教參考，實際診斷與治療請諮詢醫師。</div>
+</div>
+
+<script>
+const questions = [
+  { q: "高血壓常被稱為「沉默的殺手」，主要原因是什麼？", options: ["一定會立刻頭痛頭暈", "初期常沒有明顯症狀，但仍可能傷害身體", "只會在晚上發作", "只有老人家才會沒有症狀"], answer: 1, explain: "高血壓初期常沒有明顯不適，但血壓長期偏高仍會默默傷害血管與器官，因此要定期量測。" },
+  { q: "依目前常用的成人血壓標準，下列哪一組在診間量測值已達到「高血壓」範圍？", options: ["110/70 mmHg", "120/78 mmHg", "130/80 mmHg", "100/60 mmHg"], answer: 2, explain: "常用標準為收縮壓 ≥130 mmHg 或舒張壓 ≥80 mmHg 即屬高血壓範圍，應持續追蹤與調整生活型態。" },
+  { q: "長期血壓控制不良，最可能增加下列哪些嚴重併發症的風險？", options: ["中風、心臟病與腎臟疾病", "近視與蛀牙", "感冒與過敏", "骨折與扭傷"], answer: 0, explain: "長期高血壓會傷害血管，增加中風、心肌梗塞、心衰竭及腎功能受損等風險。" },
+  { q: "阿公在家量血壓約 120/80 mmHg，但到醫院量卻飆到 150 mmHg。這種情況最可能是？", options: ["一定是家裡血壓計壞掉", "白袍高血壓（在醫療環境緊張導致偏高）", "代表完全沒有高血壓問題，不需再理會", "只要多喝水就會好"], answer: 1, explain: "在醫院因緊張而量得偏高可能是「白袍高血壓」，建議同時參考居家規律量測紀錄並與醫師討論。" },
+  { q: "小美很瘦、平常也不頭暈，所以「絕對不會有高血壓，也不需要量血壓」。想法正確嗎？", options: ["正確，瘦的人不會有高血壓", "正確，沒有症狀就一定正常", "不正確，體型正常或無症狀仍可能有高血壓", "不正確，但只有運動員才需要量"], answer: 2, explain: "高血壓與體重、遺傳、飲食、壓力等都有關，瘦或無症狀者仍可能血壓偏高，定期量測很重要。" },
+  { q: "為了幫助控制血壓，飲食上最建議的做法是？", options: ["重鹹重口味才有力氣", "減少鈉鹽攝取，多吃蔬果與均衡飲食", "完全不喝水", "只吃肉不吃菜"], answer: 1, explain: "清淡少鹽、多蔬果、全穀類與適量蛋白質的均衡飲食，有助於血壓控制與心血管健康。" },
+  { q: "關於規律運動與血壓控制，下列何者較適當？", options: ["完全不運動最好", "規律的中等強度運動（如快走）有助於控制血壓", "只有跑馬拉松才有用", "運動到胸痛也要撐下去"], answer: 1, explain: "規律運動如快走、騎車、游泳等有助於控制體重與血壓；若運動中不適應立即休息並就醫。" },
+  { q: "如果醫師診斷高血壓並開立降壓藥，正確的做法是？", options: ["血壓正常就自行停藥", "覺得麻煩時想吃再吃", "依照醫囑規律服藥，不可自行停藥或調量", "把藥分給血壓高的親友吃"], answer: 2, explain: "降壓藥需依醫囑規律服用，血壓穩定也不代表可自行停藥，調整用藥應與醫師討論。" },
+  { q: "想早期發現高血壓，下列哪個習慣最重要？", options: ["等到很不舒服才量血壓", "定期量測血壓並記錄", "只憑感覺判斷血壓高低", "每年聽一次心跳就好"], answer: 1, explain: "高血壓早期常無症狀，定期量測與記錄血壓，才能及早發現與及早控制。" },
+  { q: "下列哪一項生活習慣「不利於」血壓控制？", options: ["維持充足睡眠與適度放鬆", "戒菸並避免過量飲酒", "長期高鹽飲食、熬夜與壓力大", "維持健康體重"], answer: 2, explain: "高鹽飲食、熬夜、壓力大、吸菸與過量飲酒都可能使血壓升高或增加心血管風險。" }
+];
+
+let players = []; // {name, score}
+let idx = 0;
+let timeLeft = 10;
+let timerId = null;
+let activePlayer = null; // index
+let lockedOut = new Set(); // players who answered wrong this question
+let questionDone = false;
+
+const $ = id => document.getElementById(id);
+
+function renderSetup(){
+  const chips = $('playerChips');
+  chips.innerHTML = players.map((p,i)=>`<div class="chip">${escapeHtml(p.name)} <button title="移除" onclick="removePlayer(${i})">×</button></div>`).join('');
+  $('startBtn').disabled = players.length < 2;
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]))}
+function addPlayer(name){
+  name = (name||'').trim();
+  if(!name) return;
+  if(players.length >= 40) { alert('最多 40 位玩家'); return; }
+  if(players.some(p=>p.name===name)) { alert('名稱重複，請換一個'); return; }
+  players.push({name, score:0});
+  $('nameInput').value='';
+  renderSetup();
+}
+function removePlayer(i){ players.splice(i,1); renderSetup(); }
+window.removePlayer = removePlayer;
+
+$('addBtn').onclick = ()=>addPlayer($('nameInput').value);
+$('nameInput').addEventListener('keydown',e=>{ if(e.key==='Enter') addPlayer($('nameInput').value); });
+
+
+$('startBtn').onclick = ()=>{
+  if(players.length < 2) return;
+  $('setupPanel').classList.add('hidden');
+  $('quizPanel').classList.remove('hidden');
+  idx = 0; players.forEach(p=>p.score=0);
+  renderQuestion();
+};
+
+function renderScoreboard(){
+  const max = Math.max(...players.map(p=>p.score));
+  $('scoreboard').innerHTML = players.map((p,i)=>`<div class="score-card ${p.score===max && players.length>1?'lead':''}"><div class="name">${escapeHtml(p.name)}</div><div class="pts">${p.score} 分</div></div>`).join('');
+}
+
+function renderBuzzers(){
+  $('buzzers').innerHTML = players.map((p,i)=>{
+    const out = lockedOut.has(i);
+    const active = activePlayer===i;
+    const dis = questionDone || out || activePlayer!==null;
+    return `<button class="buzz-btn ${active?'active':''} ${out?'out':''}" ${dis?'disabled':''} onclick="buzz(${i})">🔔 ${escapeHtml(p.name)} 搶答</button>`;
+  }).join('');
+}
+window.buzz = function(i){
+  if(questionDone || timeLeft<=0 || activePlayer!==null || lockedOut.has(i)) return;
+  activePlayer = i;
+  $('status').className='status';
+  $('status').innerHTML = `<b>${escapeHtml(players[i].name)}</b> 搶答成功！請在時間內選擇答案。`;
+  renderBuzzers();
+  enableOptions(true);
+};
+
+function enableOptions(on){
+  [...$('options').querySelectorAll('button')].forEach(b=>b.disabled = !on);
+}
+
+function startTimer(){
+  clearInterval(timerId);
+  timeLeft = 10;
+  updateTimerUI();
+  timerId = setInterval(()=>{
+    timeLeft--;
+    updateTimerUI();
+    if(timeLeft <= 0){
+      clearInterval(timerId);
+      timeUp();
+    }
+  }, 1000);
+}
+function updateTimerUI(){
+  $('timer').textContent = timeLeft;
+  $('timer').classList.toggle('low', timeLeft <= 3);
+  $('timerBar').classList.toggle('low', timeLeft <= 3);
+  $('timerFill').style.width = (timeLeft*10) + '%';
+}
+
+function renderQuestion(){
+  clearInterval(timerId);
+  activePlayer = null; lockedOut = new Set(); questionDone = false;
+  $('nextBtn').disabled = true;
+  const q = questions[idx];
+  $('progressText').textContent = `第 ${idx+1} / ${questions.length} 題`;
+  $('qno').textContent = `Q${idx+1}`;
+  $('question').textContent = q.q;
+  $('status').className='status';
+  $('status').textContent = '等待玩家搶答中…（先按名字搶答，再選答案）';
+  const opts = $('options'); opts.innerHTML='';
+  q.options.forEach((opt,i)=>{
+    const b=document.createElement('button');
+    b.className='opt'; b.type='button'; b.disabled=true;
+    b.textContent = `${String.fromCharCode(65+i)}. ${opt}`;
+    b.onclick = ()=>choose(i,b);
+    opts.appendChild(b);
+  });
+  renderScoreboard();
+  renderBuzzers();
+  startTimer();
+}
+
+function choose(i, btn){
+  if(questionDone || activePlayer===null) return;
+  const q = questions[idx];
+  const p = players[activePlayer];
+  const correct = i === q.answer;
+  const buttons = [...$('options').querySelectorAll('button')];
+  if(correct){
+    const gained = 10 + timeLeft; // 基本分+秒數獎勵
+    p.score += gained;
+    btn.classList.add('correct');
+    $('status').className='status good';
+    $('status').innerHTML = `✅ <b>${escapeHtml(p.name)}</b> 答對！+${gained} 分（含剩餘 ${timeLeft} 秒獎勵）<br><span class="small">解析：${q.explain}</span>`;
+    endQuestion(true);
+  } else {
+    p.score -= 2;
+    btn.classList.add('wrong');
+    lockedOut.add(activePlayer);
+    $('status').className='status bad';
+    const othersLeft = players.some((_,pi)=>!lockedOut.has(pi));
+    if(othersLeft && timeLeft > 0){
+      $('status').innerHTML = `❌ <b>${escapeHtml(p.name)}</b> 答錯，扣 2 分！其他人可繼續搶答。`;
+      activePlayer = null;
+      enableOptions(false);
+      renderBuzzers();
+      renderScoreboard();
+    } else {
+      $('status').innerHTML = `❌ <b>${escapeHtml(p.name)}</b> 答錯，扣 2 分！無人答對。<br><span class="small">正確答案：${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}｜${q.explain}</span>`;
+      buttons[q.answer].classList.add('correct');
+      endQuestion(false);
+    }
+  }
+}
+
+function timeUp(){
+  if(questionDone) return;
+  const q = questions[idx];
+  const buttons = [...$('options').querySelectorAll('button')];
+  buttons[q.answer].classList.add('correct');
+  $('status').className='status bad';
+  $('status').innerHTML = `⏰ 時間到！本題結束。<br><span class="small">正確答案：${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}｜${q.explain}</span>`;
+  endQuestion(false);
+}
+
+function endQuestion(){
+  questionDone = true;
+  clearInterval(timerId);
+  activePlayer = null;
+  enableOptions(false);
+  // disable buzzers
+  [...$('buzzers').querySelectorAll('button')].forEach(b=>b.disabled=true);
+  renderScoreboard();
+  $('nextBtn').disabled = false;
+  $('nextBtn').textContent = idx === questions.length - 1 ? '看排名與頒獎台' : '下一題';
+  $('timerFill').style.width = (timeLeft*10)+'%';
+}
+
+$('nextBtn').onclick = ()=>{
+  if(!questionDone) return;
+  if(idx < questions.length - 1){ idx++; renderQuestion(); }
+  else { showResult(); }
+};
+
+function showResult(){
+  $('quizPanel').classList.add('hidden');
+  $('resultPanel').classList.remove('hidden');
+  const sorted = [...players].map((p,i)=>({...p, i})).sort((a,b)=>b.score-a.score || a.i-b.i);
+  // podium: show 2nd,1st,3rd order visually
+  const podium = $('podium');
+  podium.innerHTML = '';
+  const slots = [
+    {pos:1, cls:'second', medal:'🥈', label:'第二名'},
+    {pos:0, cls:'first',  medal:'🥇', label:'第一名'},
+    {pos:2, cls:'third',  medal:'🥉', label:'第三名'}
+  ];
+  slots.forEach(s=>{
+    const p = sorted[s.pos];
+    const div = document.createElement('div');
+    div.className = `pod ${s.cls}`;
+    if(p){
+      div.innerHTML = `<div class="avatar">${escapeHtml(p.name)}</div><div class="medal">${s.medal}</div><div class="block"><div class="rank">${s.label}</div><div class="pname">${escapeHtml(p.name)}</div><div class="pscore">${p.score} 分</div></div>`;
+    } else {
+      div.innerHTML = `<div class="avatar" style="opacity:.4">—</div><div class="medal">${s.medal}</div><div class="block" style="opacity:.45"><div class="rank">${s.label}</div><div class="pname">從缺</div><div class="pscore">—</div></div>`;
+    }
+    podium.appendChild(div);
+  });
+  // rank list
+  $('rankList').innerHTML = sorted.map((p,rank)=>`<div class="rank-item ${rank<3?'top':''}"><span>#${rank+1}　${rank===0?'🏆 ':rank===1?'🥈 ':rank===2?'🥉 ':''}${escapeHtml(p.name)}</span><span>${p.score} 分</span></div>`).join('');
+  // review
+  $('reviewList').innerHTML = questions.map((q,i)=>`<div class="review-item"><div style="font-weight:700;margin-bottom:4px">${i+1}. ${q.q}</div><div class="small">正確答案：${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}</div><div class="small">解析：${q.explain}</div></div>`).join('');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+$('restartBtn').onclick = ()=>{
+  clearInterval(timerId);
+  $('resultPanel').classList.add('hidden');
+  $('setupPanel').classList.remove('hidden');
+  players = [];
+  renderSetup();
+};
+
+renderSetup();
+</script>
+</body>
+</html>
